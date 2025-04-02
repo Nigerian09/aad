@@ -1,0 +1,439 @@
+Min heap:
+
+
+#include <bits/stdc++.h>
+using namespace std;
+void heapify(vector<int>& arr, int n, int i) {
+    int smallest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+    if (left < n && arr[left] < arr[smallest]) {
+        smallest = left;
+    }
+    if (right < n && arr[right] < arr[smallest]) {
+        smallest = right;
+    }
+    if (smallest != i) {
+        swap(arr[i], arr[smallest]);
+        heapify(arr, n, smallest);
+    }
+}
+void buildMinHeap(vector<int>& arr, int n) {
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        heapify(arr, n, i);
+    }
+}
+int main() {
+    int n;
+    cin >> n;
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+    buildMinHeap(arr, n);
+    for (int i = 0; i < n; i++) {
+        cout << arr[i]<<" ";
+    }
+    return 0;
+}
+
+
+
+Max Heap:
+
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+void heapify(vector<int>& arr, int n, int i) {
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+    if (left < n && arr[left] > arr[largest]) {
+        largest = left;
+    }
+    if (right < n && arr[right] > arr[largest]) {
+        largest = right;
+    }
+    if (largest != i) {
+        swap(arr[i], arr[largest]);
+        heapify(arr, n, largest);
+    }
+}
+void heapSort(vector<int>& arr, int n) {
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        heapify(arr, n, i);
+    }
+    for (int i = n - 1; i > 0; i--) {
+        swap(arr[0], arr[i]);
+        heapify(arr, i, 0);
+    }
+}
+bool isSorted(const vector<int>& arr) {
+    for (int i = 1; i < arr.size(); i++) {
+        if (arr[i] < arr[i - 1]) {
+            return false;
+        }
+    }
+    return true;
+}
+int main() {
+    int n;
+    cin >> n;
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+    if (isSorted(arr)) {
+        cout << -1 << endl;
+        return 0;
+    }
+    heapSort(arr, n);
+    for (int i = 0; i < n; i++) {
+        cout << arr[i]<<" ";
+    }
+    cout << endl;
+    return 0;
+}
+
+Frequency of elements:
+
+
+#include<iostream>
+#include<algorithm>
+using namespace std;
+struct Element{
+    int value;
+    int freq;
+};
+int main()
+{
+    int n,k;
+    cin>>n;
+    int a[n];
+    for(int i=0;i<n;i++)
+    {
+        if(!(cin>>a[i]))
+        {
+            cout<<"Invalid input";
+            return 0;
+        }
+    }
+    cin>>k;
+    Element freq[101];
+    for(int i=0;i<101;i++)
+    {
+        freq[i]={i,0};
+    }
+    for(int i=0;i<n;i++)
+    {
+        int idx=a[i];
+        freq[idx+50].value=a[i];
+        freq[idx+50].freq++;
+    }
+    sort(freq,freq+101,[](Element a,Element b)
+    {
+        if(a.freq==b.freq)
+        {
+            return a.value<b.value;
+        }
+        return a.freq>b.freq;
+    });
+    int c=0;
+    for(int i=0;i<101&&c<k;i++)
+    {
+        if(freq[i].freq>0)
+        {
+            cout<<freq[i].value<<" ";
+            c++;
+        }
+    }
+}
+
+
+Maximum number of non-overlapping activities:
+
+
+#include<bits/stdc++.h>
+using namespace std;
+struct act{
+    int start;
+    int finish;
+};
+void select(vector<act> &aa)
+{
+    sort(aa.begin(),aa.end(),[](act a,act b)
+    {
+        return a.finish<b.finish;
+    });
+    int large=0;
+    int c=1;
+    for(int i=0;i<aa.size();i++)
+    {
+        if(aa[i].start>=aa[large].finish)
+        {
+            c++;
+            large=i;
+        }
+    }cout<<c;
+    
+}
+int main()
+{
+    int n;
+    cin>>n;
+    vector<act>arr(n);
+    for(int i=0;i<n;i++)
+    {
+        if(!(cin>>arr[i].start>>arr[i].finish))
+        {
+            cout<<"Invalid input";
+            return 0;
+        }
+    }
+    select(arr);
+}
+
+
+
+Activity:
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+struct Activity {
+    int start;
+    int end;
+    int resource;
+};
+bool compare(Activity a, Activity b) {
+    return a.end < b.end;
+}
+int main() {
+    int n;
+    cin >> n;
+    if (n < 1 || n > 100) {
+        cout << "Invalid input" << endl;
+        return 0;
+    }
+    vector<Activity> activities;
+    for (int i = 0; i < n; i++) {
+        int start, end, resource;
+        cin >> start >> end >> resource;
+        if (start > end) {
+            cout << "Invalid input" << endl;
+            return 0;
+        }
+        activities.push_back({start, end, resource});
+    }
+    sort(activities.begin(), activities.end(), compare);
+    vector<Activity> selectedActivities;
+    int totalResources = 0;
+    int lastEndTime = -1;
+    for (const auto& activity : activities) {
+        if (activity.start >= lastEndTime) {
+            selectedActivities.push_back(activity);
+            totalResources += activity.resource;
+            lastEndTime = activity.end;
+        }
+    }
+    for (const auto& activity : selectedActivities) {
+        cout << activity.start << " " << activity.end << " " << activity.resource << endl;
+    }
+    cout << totalResources << endl;
+    return 0;
+}
+
+
+
+1 for min element, 2 for max element:
+
+
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+    int n;
+    cin >> n;
+    if (n < 1 || n > 100) {
+        cout << "Invalid input" << endl;
+        return 1;
+    }
+    vector<int> elements(n);
+    for (int i = 0; i < n; i++) {
+        if (!(cin >> elements[i])) {
+            cout << "Invalid input" << endl;
+            return 1;
+        }
+    }
+    int choice;
+    if (!(cin >> choice) || (choice != 1 && choice != 2)) {
+        cout << "Invalid input" << endl;
+        return 1;
+    }
+    if (choice == 1) {
+        cout << *min_element(elements.begin(), elements.end()) << endl;
+    } else {
+        cout << *max_element(elements.begin(), elements.end()) << endl;
+    }
+    return 0;
+}
+
+
+
+k fastest delivery combinations:
+
+#include<iostream>
+#include<vector>
+#include<queue>
+#include<algorithm>
+using namespace std;
+struct Combination
+{
+    int sum;
+    int i;
+    int j;
+    bool operator<(const Combination& other) const
+    {
+        return sum<other.sum;
+    }
+};
+void kFast(int n,vector<int>&A,vector<int>& B,int k)
+{
+    priority_queue<Combination> pq;
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            pq.push({A[i]+B[j],i,j});
+        }
+    }
+    for(int x=0;x<k&& !pq.empty();x++)
+    {
+        Combination top=pq.top();
+        pq.pop();
+        cout<<A[top.i]<<" "<<B[top.j]<<endl;
+    }
+}
+int main()
+{
+    int n;
+    cin>>n;
+    if(cin.fail())
+    {
+        cout<<"Invalid input";
+        return 0;
+    }
+    vector<int> A(n),B(n);
+    for(int i=0;i<n;i++)
+    {
+        cin>>A[i];
+        if(cin.fail())
+        {
+            cout<<"Invalid input";
+            return 0;
+        }
+    }
+    for(int i=0;i<n;i++)
+    {
+        cin>>B[i];
+        if(cin.fail())
+        {
+            cout<<"Invalid input";
+            return 0;
+        }
+    }int k;
+    cin>>k;
+    kFast(n,A,B,k);
+}
+
+
+
+merge sorted array:
+
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+int main() {
+    int k;
+    cin >> k;
+    if (k < 0 || k > 10) {
+        cout << "Invalid input" << endl;
+        return 0;
+    }
+    priority_queue<int, vector<int>, greater<int>> minHeap;
+    for (int i = 0; i < k; i++) {
+        int n;
+        cin >> n;
+        for (int j = 0; j < n; j++) {
+            int num;
+            cin >> num;
+            minHeap.push(num);
+        }
+    }
+    while (!minHeap.empty()) {
+        cout << minHeap.top() << " ";
+        minHeap.pop();
+    }
+    cout << endl;
+    return 0;
+}
+
+
+
+activity:
+
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+struct Event
+{
+    int start;
+    int end;
+    int penalty;
+};
+bool compareByEndTime(Event a,Event b)
+{
+    return a.end<b.end;
+}
+void scheduleRoyalEvents(int n,vector<Event>&events)
+{
+    sort(events.begin(),events.end(),compareByEndTime);
+    vector<Event> selected_events;
+    int current=0;
+    int total=0;
+    for(auto event:events)
+    {
+        if(event.start>event.end)
+        {
+            cout<<"Invalid input";
+            return;
+        }
+        if(event.start>=current)
+        {
+            selected_events.push_back(event);
+            current=event.end;
+        }
+    }
+    for(auto event:selected_events)
+    {
+        cout<<event.start<<" "<<event.end<<" "<<event.penalty<<endl;
+        total+=event.penalty;
+    }
+    cout<<total;
+    
+}
+int main()
+{
+    int n;
+    cin>>n;
+    vector<Event> events(n);
+    for(int i=0;i<n;i++)
+    {
+        cin>>events[i].start>>events[i].end>>events[i].penalty;
+    }
+    scheduleRoyalEvents(n,events);
+}
