@@ -1,0 +1,585 @@
+Bubble sort:
+
+i)
+#include<iostream>
+using namespace std;
+int main() {
+    int n;
+    cin>>n;
+    bool found;
+    int a[n];
+    for(int i=0;i<n;i++) {
+        if(!(cin>>a[i])) {
+            cout<<"Invalid input";
+            return 0;
+        }
+    }
+    found = false;
+    for(int i=0;i<n-1;i++) {
+        for(int j=0;j<n-i-1;j++) {
+            if(a[j]>a[j+1]) {
+                swap(a[j+1],a[j]);
+                found = true;
+            }
+        }
+    }
+    if(found==false) {
+        cout<<"-1";
+        return 0;
+    }
+    for(int i:a) {
+        cout<<i<<" ";
+    }
+}
+
+ii)
+#include <iostream>
+using namespace std;
+void merge(int a[], int l, int mid, int r, bool as){
+    int n1=mid-l+1;
+    int n2=r-mid;
+    int larr[n1];
+    int rarr[n2];
+    for(int i=0;i<n1;i++){
+        larr[i]=a[l+i];
+    }
+    for(int j=0;j<n2;j++){
+        rarr[j]=a[mid+1+j];
+    }
+    int i=0;
+    int j=0;
+    int k=l;
+    while(i<n1 && j<n2){
+        if(as ? larr[i] <= rarr[j] : larr[i]>=rarr[j]){
+            a[k]=larr[i];
+            i++;
+        }
+        else{
+            a[k]=rarr[j];
+            j++;
+        }
+        k++;
+    }
+    while(i<n1){
+        a[k]=larr[i];
+        i++;
+        k++;
+    }
+}
+void mergesort(int a[], int l, int r, bool as){
+    if(l<r){
+        int mid=l+(r-l)/2;
+        mergesort(a,l,mid,as);
+        mergesort(a,mid+1,r,as);
+        merge(a,l,mid,r,as);
+    }
+}
+bool isSorted(int a[],int n, bool as){
+    for(int i=1;i<n;i++){
+        if(as){
+            if(a[i]<a[i-1])
+            return false;
+        }
+        else{
+            if(a[i]>a[i-1])
+            return false;
+        }
+    }
+    return true;
+}
+int main(){
+    int n;
+    cin>>n;
+    int a[n];
+    for(int i=0;i<n;i++){
+        if(!(cin>>a[i])){
+            cout<<"Invalid input";
+            return 0;
+        }
+    }
+    char h;
+    cin>>h;
+    if(h!='a' && h!='d'){
+        cout<<"Invalid input";
+        return 0;
+    }
+    bool as = (h=='a');
+    if(isSorted(a,n,as)){
+        cout<<"-1";
+        return 0;
+    }
+    mergesort(a,0,n-1,as);
+    for(int i=0;i<n;i++){
+        cout<<a[i]<<" ";
+    }
+    return 0;
+}
+
+
+
+
+Insertion Sort:
+
+i)
+#include <iostream>
+using namespace std;
+int main(){
+    int n;
+    cin>>n;
+    bool found = false;
+    int a[n];
+    for(int i=0;i<n;i++){
+        if(!(cin>>a[i])){
+            cout<<"Invalid input";
+            return 0;
+        }
+    }
+    int key;
+    
+    for(int i=1;i<n;i++){
+        int key=a[i];
+        int j=i-1;
+        while(j>=0 && a[j]>key){
+            a[j+1]=a[j];
+            j--;
+            found = true;
+        }
+        a[j+1]=key;
+    }
+    if(found==false){
+        cout<<"-1";
+        return 0;
+    }
+    for(int i: a){
+        cout<<i<<" ";
+    }
+}
+
+ii)
+#include <iostream>
+using namespace std;
+void merge(int a[], int l, int mid, int r, bool as){
+    int n1=mid-l+1;
+    int n2=r-mid;
+    int larr[n1];
+    int rarr[n2];
+    for(int i=0;i<n1;i++){
+        larr[i]=a[l+i];
+    }
+    for(int j=0;j<n2;j++){
+        rarr[j]=a[mid+1+j];
+    }
+    int i=0;
+    int j=0;
+    int k=l;
+    while(i<n1 && j<n2){
+        if(as ? larr[i] <= rarr[j] : larr[i]>=rarr[j]){
+            a[k]=larr[i];
+            i++;
+        }
+        else{
+            a[k]=rarr[j];
+            j++;
+        }
+        k++;
+    }
+    while(i<n1){
+        a[k]=larr[i];
+        i++;
+        k++;
+    }
+}
+void mergesort(int a[], int l, int r, bool as){
+    if(l<r){
+        int mid=l+(r-l)/2;
+        mergesort(a,l,mid,as);
+        mergesort(a,mid+1,r,as);
+        merge(a,l,mid,r,as);
+    }
+}
+bool isSorted(int a[],int n, bool as){
+    for(int i=1;i<n;i++){
+        if(as){
+            if(a[i]<a[i-1])
+            return false;
+        }
+        else{
+            if(a[i]>a[i-1])
+            return false;
+        }
+    }
+    return true;
+}
+int main(){
+    int n;
+    cin>>n;
+    int a[n];
+    for(int i=0;i<n;i++){
+        if(!(cin>>a[i])){
+            cout<<"Invalid input";
+            return 0;
+        }
+    }
+    bool as = NULL;
+    if(isSorted(a,n,as)){
+        cout<<"-1";
+        return 0;
+    }
+    mergesort(a,0,n-1,as);
+    for(int i=0;i<n;i++){
+        cout<<a[i]<<" ";
+    }
+    return 0;
+}
+
+
+
+Selection Sort:
+
+i)
+#include <iostream>
+using namespace std;
+int main(){
+    int n;
+    cin>>n;
+    if(n<=0){
+        cout<<"Invalid input";
+        return 0;
+    }
+    int a[100];
+    for(int i=0;i<n;i++){
+        if(!(cin>>a[i])){
+            cout<<"Invalid input";
+            return 0;
+        }
+    }
+    int k;
+    cin>>k;
+    if(k<0||k>=n){
+        cout<<"Invalid input";
+        return 0;
+    }
+    bool same=true;
+    for(int i=1;i<n;i++){
+        if(a[i]!=a[0]){
+            same= false;
+            break;
+        }
+    }
+    if(same){
+        cout<<"-1";
+        return 0;
+    }
+    for(int i=1;i<=n-1;i++){
+        int temp=i;
+        for(int j=i+1;j<n;j++){
+            if(a[temp]>a[j]){
+                temp=j;
+            }
+        }
+        swap(a[temp], a[i]);
+    }
+    cout<<a[k];
+}
+
+ii)
+#include <iostream>
+using namespace std;
+void ss(int arr[], int n){
+    for(int i=0;i<n-1;i++){
+        int min=i;
+        for(int j=i+1; j<n;j++){
+            if(arr[j]<arr[min]){
+                min=j;
+            }
+        }
+        swap(arr[i], arr[min]);
+    }
+}
+int co(int arr[], int n, int lower, int upper){
+    int count=0;
+    for(int i=0;i<n;i++){
+        if(arr[i]>=lower && arr[i]<=upper){
+            count++;
+        }
+    }
+    return count;
+}
+int main(){
+    int n;
+    cin>>n;
+    if(n<1 || n>100){
+        cout<<"Invalid input";
+        return 0;
+    }
+    int arr[n];
+    for(int i=0;i<n;i++){
+        if(!(cin>>arr[i])){
+            cout<<"Invalid input";
+            return 0;
+        }
+    }
+    int lower,upper;
+    if(!(cin>>lower>>upper)){
+        ss(arr,n);
+        for(int i=0;i<n;i++){
+            cout<<arr[i]<<" ";
+        }
+        cout<<endl;
+        cout<<"Invalid input";
+        return 0;
+    }
+    if(lower>upper){
+        ss(arr,n);
+        for(int i=0;i<n;i++){
+            cout<<arr[i]<<" ";
+        }
+        cout<<endl;
+        cout<<"-1";
+        return 0;
+    }
+    ss(arr,n);
+    int count = co(arr,n,lower,upper);
+    for(int i=0;i<n;i++){
+        cout<<arr[i]<<" ";
+    }
+    cout<<endl;
+    cout<<count;
+    return 0;
+}
+
+
+Merge Sort:
+
+#include <iostream>
+using namespace std;
+void merge(int arr[], int left, int mid,  int right){
+    int n1=mid-left+1;
+    int n2=right-mid;
+    int leftArr[n1], rightArr[n2];
+    for(int i=0;i<n1;i++) leftArr[i]=arr[left+i];
+    for(int i=0;i<n2;i++) rightArr[i]= arr[mid + 1 + i];
+    int i=0,j=0,k=left;
+    while(i<n1 && j<n2){
+        if(leftArr[i]<=rightArr[j]){
+            arr[k]=leftArr[i];
+            i++;
+        }
+        else{
+            arr[k]=rightArr[j];
+            j++;
+        }
+        k++;
+    }
+    while(i<n1){
+        arr[k]=leftArr[i];
+        i++;
+        k++;
+    }
+    while(j<n2){
+        arr[k]=rightArr[j];
+        j++;
+        k++;
+    }
+}
+void mergeSort(int arr[], int left, int right){
+    if(left<right){
+        int mid=left+(right-left)/2;
+        mergeSort(arr,left,mid);
+        mergeSort(arr,mid+1,right);
+        merge(arr,left,mid,right);
+    }
+}
+bool isSorted(int arr[], int n){
+    for(int i=1;i<n;i++){
+        if(arr[i]<arr[i-1]){
+            return false;
+        }
+    }
+    return true;
+}
+int main(){
+    int n;
+    cin>>n;
+    if(n<1 || n>100){
+        cout<<"Invalid input"<<endl;
+        return 0;
+    }
+    int arr[n];
+    for(int i=0;i<n;i++){
+        if(!(cin>>arr[i])){
+            cout<<"Invalid input"<<endl;
+            return 0;
+        }
+    }
+    if(isSorted(arr,n)){
+        cout<<"-1"<<endl;
+        return 0;
+    }
+    mergeSort(arr,0,n-1);
+    for(int i=0;i<n;i++){
+        cout<<arr[i]<<" ";
+    }
+    cout<<endl;
+    return 0;
+}
+
+
+Quick Sort:
+
+#include <iostream>
+using namespace std;
+void merge(int a[], int l, int mid, int r){
+    int n1=mid-l+1;
+    int n2=r-mid;
+    int larr[n1];
+    int rarr[n2];
+    for(int i=0;i<n1;i++){
+        larr[i]=a[l+i];
+    }
+    for(int j=0;j<n2;j++){
+        rarr[j]=a[mid+1+j];
+    }
+    int i=0;
+    int j=0;
+    int k=l;
+    while(i<n1 && j<n2){
+        if(larr[i] <= rarr[j]){
+            a[k]=larr[i];
+            i++;
+        }
+        else{
+            a[k]=rarr[j];
+            j++;
+        }
+        k++;
+    }
+    while(i<n1){
+        a[k]=larr[i];
+        i++;
+        k++;
+    }
+    while (j<n2){
+        a[k]=rarr[j];
+        j++;
+        k++;
+    }
+}
+void mergesort(int a[], int l, int r){
+    if(l<r){
+        int mid=l+(r-l)/2;
+        mergesort(a,l,mid);
+        mergesort(a,mid+1,r);
+        merge(a,l,mid,r);
+    }
+}
+bool isSorted(int a[],int n){
+    for(int i=1;i<n;i++){
+        if(a[i]<a[i-1])
+        return false;
+    }
+    return true;
+}
+int main(){
+    int n;
+    cin>>n;
+    int a[n];
+    for(int i=0;i<n;i++){
+        if(!(cin>>a[i])){
+            cout<<"Invalid input";
+            return 0;
+        }
+    }
+    if(isSorted(a,n)){
+        cout<<"-1";
+        return 0;
+    }
+    mergesort(a,0,n-1);
+    for(int i=0;i<n;i++){
+        cout<<a[i]<<" ";
+    }
+    return 0;
+}
+
+
+
+Binary Search:
+
+#include<iostream>
+using namespace std;
+int bs(int arr[], int n,int k) {
+    int left=0,right=n-1;
+    while(left<=right) {
+        int mid=left+(right-left)/2;
+        if(arr[mid]==k) {
+            return mid;
+        }
+        else if(arr[mid]<k) {
+            left=mid+1;
+        }
+        else {
+            right=mid-1;
+        }
+    }
+    return -1;
+}
+int main() {
+    int n;
+    if(!(cin>>n) || n<1 || n>100) {
+        cout<<"Invalid input";
+        return 0;
+    }
+    int arr[n];
+    for(int i=0;i<n;i++) {
+        if(!(cin>>arr[i])) {
+            cout<<"Invalid input";
+            return 0;
+        }
+    }
+    int k;
+    if(!(cin>>k)) {
+        cout<<"Invalid input";
+        return 0;
+    }
+    int result=bs(arr,n,k);
+    cout<<result;
+    return 0;
+}
+
+
+Linear Search:
+
+
+#include <iostream>
+using namespace std;
+int main(){
+    int n;
+    if(!(cin>>n || n<1 || n>100)){
+        cout<<"Invalid input";
+        return 0;
+    }
+    int arr[n];
+    for(int i=0;i<n;i++){
+        if(!(cin>>arr[i])){
+            cout<<"Invalid input";
+            return 0;
+        }
+    }
+    int k;
+    if(!(cin>>k)){
+        cout<<"Invalid input";
+        return 0;
+    }
+    int lastIndex = -1;
+    for(int i=0;i<n;i++){
+        if(arr[i]==k){
+            lastIndex=i;
+        }
+    }
+    if(lastIndex == -1){
+        cout<<"-1";
+    }else{
+        cout<<lastIndex;
+    }
+    return 0;
+}
