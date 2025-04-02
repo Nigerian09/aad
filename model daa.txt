@@ -1,0 +1,793 @@
+// linear search
+#include<iostream>
+using namespace std;
+int main() {
+    int n;
+    cin>>n;
+    int arr[n];
+    bool found=false;
+    for(int i=0;i<n;i++) {
+        if(!(cin>>arr[i])) {
+            cout<<"-1";
+            return 0;
+        }
+    }    
+    int target;
+    cin>>target;
+    for(int i=0;i<n;i++) {
+        if(target==arr[i]) {
+            cout<<i<<" ";
+            found=true;            
+        }
+    }
+    if(found==false) {
+        cout<<"Invalid input";
+        return 0;
+    }    
+}
+
+//binary search
+#include<iostream> 
+using namespace std; 
+bool binarySearch(int arr[], int n, int target) { 
+    int left = 0, right = n - 1; 
+    while (left <= right) { 
+        int mid = (left + right) / 2; 
+        if (arr[mid] == target)  
+            return true; 
+        else if (arr[mid] < target) 
+            left = mid + 1; 
+        else 
+            right = mid - 1; 
+    } 
+    return false; 
+}  
+int main() { 
+    int n; 
+    cin >> n; 
+    if (n <= 0) { 
+        cout << -1; 
+        return 0; 
+    }  
+    int arr[n]; 
+    for (int i = 0; i < n; i++) { 
+        cin >> arr[i]; 
+    }   
+    int target; 
+    cin >> target; 
+    if (binarySearch(arr, n, target)) 
+        cout << "Found"; 
+    else 
+        cout << "Not Found"; 
+    return 0; 
+}
+
+//selection sort
+#include<iostream>
+using namespace std;
+int main() {
+   int n;
+   cin>>n;
+   int arr[n];
+   for(int i=0;i<n;i++) {
+       if(!(cin>>arr[i])) {
+           cout<<"-1";
+           return 0;
+       }
+   }   
+   int k;
+   cin>>k;
+   if(k<0||k>=n) {
+       cout<<"-1";
+       return 0;
+   }
+   bool same=true;
+   for(int i=0;i<n;i++) {
+       if(arr[i]!=arr[0]) {
+           same=false;
+           break;
+       }      
+   }   
+   for(int i=0;i<n-1;i++) {
+       int min=i;
+       for(int j=i+1;j<n;j++) {
+           if(arr[min]>arr[j]) {
+               min=j;
+           }
+       }
+       swap(arr[i],arr[min]);
+   }
+   cout<<arr[k]<<" ";
+   return 0;
+}
+
+//bubble sort
+#include<iostream>
+using namespace std;
+int main() {
+    int n;
+    cin>>n;
+    bool found=false;
+     int a[n];
+     for(int i=0;i<n;i++) {
+         if(!(cin>>a[i])) {
+             cout<<"-1";
+             return 0;
+         }
+     }
+    //  found=false;
+     for(int i=0;i<n-1;i++) {
+         for(int j=0;j<n-i-1;j++) {
+             if(a[j]>a[j+1]) {
+                 swap(a[j+1],a[j]);
+                 found=true;
+             }
+         }
+     }     
+     if(found==false) {
+         cout<<"-1";
+         return 0;
+     }
+     for(int i:a) {
+         cout<<i<<" ";
+     }
+     return 0;
+}
+
+//insertion sort
+#include<iostream>
+using namespace std;
+int main() {
+    int n;
+    cin>>n;
+    int arr[n];
+    bool found=false;
+    for(int i=0;i<n;i++) {
+        if(!(cin>>arr[i])) {
+            cout<<"-1";
+            return 0;
+        }
+    }
+    int key=0;
+    for(int i=1;i<n;i++) {
+        key=arr[i];
+        int j=i-1;
+        while(j>=0&&arr[j]>=key) {
+            arr[j+1]=arr[j];
+            j--;
+            found=true;
+        }
+        arr[j+1]=key;
+    }
+    if(found==false) {
+        cout<<"-1";
+        return 0;
+    }
+    for(int i:arr) {
+        cout<<i<<" ";
+    }
+    return 0;
+}
+
+//Activity
+#include <iostream> 
+#include <vector> 
+#include <algorithm> 
+using namespace std; 
+ 
+struct Activity { 
+    int start, finish; 
+};
+bool compare(Activity a, Activity b) { 
+    return a.finish < b.finish; 
+}
+int main() { 
+    try { 
+        int n; 
+        cin >> n; 
+        if (n <= 0) { 
+            cout << "-1" << endl; 
+            return 0; 
+        } 
+        vector<Activity> activities(n); 
+        for (int i = 0; i < n; i++) { 
+            cin >> activities[i].start >> activities[i].finish; 
+        } 
+        sort(activities.begin(), activities.end(), compare); 
+        cout << "Selected Activities:\n"; 
+        cout << "Activity 1: Start = " << activities[0].start << ", Finish = " << activities[0].finish 
+<< endl; 
+        int lastFinishTime = activities[0].finish; 
+        for (int i = 1; i < n; i++) { 
+            if (activities[i].start >= lastFinishTime) { 
+                cout << "Activity " << i + 1 << ": Start = " << activities[i].start << ", Finish = " << 
+activities[i].finish << endl; 
+                lastFinishTime = activities[i].finish; 
+            } 
+        } 
+    } catch (exception &e) { 
+        cout << "Invalid input" << endl; 
+    } 
+    return 0; 
+}
+
+//Pattern Search algorithm
+#include <bits/stdc++.h>
+using namespace std;
+void printOccurrences(string txt, string pat) {
+    int found = txt.find(pat);
+    while (found != string::npos) {
+        cout << "Pattern found at index " << found << endl;
+        found = txt.find(pat, found + 1);
+    }
+}
+int main() {
+    string txt , pat ;
+    printOccurrences(txt, pat);
+    return 0;
+}
+
+//coins
+#include <iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+int coinChange(vector<int>& coins,int amount) {
+    vector<int> dp(amount+1,amount+1);
+    dp[0]=0;
+    for(int i=1;i<=amount;i++) {
+        for(int coin:coins) {
+            if(coin<=i) {
+                dp[i]=min(dp[i],dp[i-coin]+1);
+            }
+        }
+    }
+    return dp[amount];
+}
+int main() {
+    vector<int> coins={1,2,5,10,5,3,2,4,};
+    int amount=18;
+    cout<<coinChange(coins,amount);
+    return 0;
+}
+
+//range query
+#include <bits/stdc++.h>
+using namespace std;
+void record_sum(int record[], int l, int r, int n, int adder) {
+    for (int i = l; i <= r; i++) 
+        record[i] += adder;    
+}
+int main() {
+    int n = 5, m = 5;
+    int arr[n];
+    memset(arr, 0, sizeof arr);
+    int query[5][3] = { { 1, 1, 2 }, { 1, 4, 5 },
+                         { 2, 1, 2 }, { 2, 1, 3 }, 
+                         { 2, 3, 4 } };
+    int record[m];
+    memset(record, 0, sizeof record);
+    for (int i = m - 1; i >= 0; i--) {
+        if (query[i][0] == 2) 
+            record_sum(record, query[i][1] - 1, 
+               query[i][2] - 1, m, record[i] + 1);
+        else
+            record_sum(record, i, i, m, 1);
+    }
+    for (int i = 0; i < m; i++) {
+        if (query[i][0] == 1) 
+            record_sum(arr, query[i][1] - 1,
+                 query[i][2] - 1, n, record[i]);        
+    }
+    for (int i = 0; i < n; i++) 
+        cout << arr[i] << ' ';
+    return 0;
+}
+
+//shortest path
+#include <bits/stdc++.h>
+using namespace std;
+int minKey(vector<int> &key, vector<bool> &mstSet) {
+    int minIdx = -1, minVal = INT_MAX;
+    for (int v = 0; v < key.size(); v++)
+        if (!mstSet[v] && key[v] < minVal)
+            minVal = key[v], minIdx = v;
+    return minIdx;
+}
+void primMST(vector<vector<int>> &graph) {
+    int V = graph.size();
+    vector<int> parent(V, -1), key(V, INT_MAX);
+    vector<bool> mstSet(V, false);
+    key[0] = 0;
+    for (int count = 0; count < V - 1; count++) {
+        int u = minKey(key, mstSet);
+        mstSet[u] = true;
+        for (int v = 0; v < V; v++)
+            if (graph[u][v] && !mstSet[v] && graph[u][v] < key[v])
+                parent[v] = u, key[v] = graph[u][v];
+    }
+    cout << "Edge \tWeight\n";
+    for (int i = 1; i < V; i++)
+        cout << parent[i] << " - " << i << " \t" << graph[parent[i]][i] << "\n";
+}
+int main() {
+    vector<vector<int>> graph = {
+        {0, 2, 0, 6, 0}, {2, 0, 3, 8, 5}, {0, 3, 0, 0, 7}, 
+        {6, 8, 0, 0, 9}, {0, 5, 7, 9, 0} 
+    };
+    primMST(graph);
+}
+
+//djisktra
+#include <bits/stdc++.h>
+#define INF 1e9
+using namespace std;
+class Node {
+public:
+    int vertex;
+    vector<pair<int, int>> children;
+    Node(int v) : vertex(v) {}
+    void add_child(int v, int weight) { children.push_back({v, weight}); }
+};
+vector<int> dijkstra(vector<Node*> &graph, int src, vector<int> &path) {
+    int n = graph.size();
+    vector<int> dist(n, INF);
+    vector<bool> visited(n, false);
+    dist[src] = 0;
+    path[src] = -1;
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> pq;
+    pq.push({0, src});
+    while (!pq.empty()) {
+        int u = pq.top().second;
+        pq.pop();
+        if (visited[u]) continue;
+        visited[u] = true;
+
+        for (auto &[v, w] : graph[u]->children) {
+            if (!visited[v] && dist[u] + w < dist[v]) {
+                dist[v] = dist[u] + w;
+                path[v] = u;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+    return dist;
+}
+int main() {
+    int n = 4, src = 0;
+    vector<Node*> graph;
+    for (int i = 0; i < n; i++) graph.push_back(new Node(i));
+    graph[0]->add_child(1, 1);
+    graph[0]->add_child(2, 4);
+    graph[1]->add_child(2, 2);
+    graph[1]->add_child(3, 6);
+    graph[2]->add_child(3, 3);
+    vector<int> path(n);
+    vector<int> dist = dijkstra(graph, src, path);
+    for (int i = 0; i < n; i++) {
+        cout << "Distance from " << src << " to " << i << " is: " 
+             << (dist[i] == INF ? "Not connected" : to_string(dist[i])) << endl;
+    }
+}
+
+//rat
+#include<iostream>
+#include<vector>
+using namespace std;
+bool check(int row,int col,int n,vector<vector<int>> maze,vector<vector<bool>> visited) {
+    return (row>=0 && col>=0 && row<n && col<n && maze[row][col]== 1 && !visited[row][col]);
+}
+void findAllPath(int row,int col,int n,vector<vector<int>> maze,vector<vector<bool>> visited,vector<string>& paths,string path) {
+    if(row == n-1 && col==n-1) {
+        paths.push_back(path);
+        return;
+    }
+    visited[row][col] = true;
+    if(check(row+1,col,n,maze,visited)) {
+        findAllPath(row+1,col,n,maze,visited,paths,path+"D");
+    }
+    if(check(row-1,col,n,maze,visited)) {
+        findAllPath(row-1,col,n,maze,visited,paths,path+"U");
+    }
+    if(check(row,col+1,n,maze,visited)) {
+        findAllPath(row,col+1,n,maze,visited,paths,path+"R");
+    }
+    if(check(row,col-1,n,maze,visited)) {
+        findAllPath(row,col-1,n,maze,visited,paths,path+"L");
+    }
+    visited[row][col] = false;
+}
+int main() {
+    int n =6;
+    vector<vector<int>> maze {
+        {1,1,0,0,1,0},
+        {0,1,0,1,1,1},
+        {0,1,0,1,0,1},
+        {1,1,0,1,0,1},
+        {1,1,1,1,0,1},
+        {0,0,1,0,0,1}
+    };
+    vector<vector<bool>> visited(n,vector<bool>(n,false));
+    vector<string> paths;
+    findAllPath(0,0,n,maze,visited,paths,"");
+    for(string i:paths){
+        cout<<i<<endl;
+    }
+    return 0;
+}
+
+//kanpsack
+#include <iostream>            
+#include<vector>
+#include<algorithm>
+using namespace std;
+struct Item {
+	int profit;
+	int weight;
+};
+bool cmp(struct Item a,struct Item b) {
+	double r1=(double)a.profit/(double)a.weight;
+	double r2=(double)b.profit/(double)b.weight;
+	return r1>r2;
+}
+double fractionalKnapsack(vector<Item> arr,int w) {
+	sort(arr.begin(),arr.end(),cmp);
+	double finalvalue=0.0;
+	for(int i=0;i<arr.size();i++) {
+		if(arr[i].weight<=w) {
+			w-=arr[i].weight;
+			finalvalue+=arr[i].profit;
+		}else{
+			finalvalue+=arr[i].profit * ((double)w / (double)arr[i].weight);
+		break;
+		}
+	}
+	return finalvalue;
+}
+int main() {
+	vector<Item> arr={{10,2},{7,7},{14,3},{15,3},{12,4}};
+	int w=15;
+	cout<<fractionalKnapsack(arr,w);
+	return 0;
+}
+
+//nqueen
+#include<iostream>
+#include<vector>
+using namespace std;
+bool isSafe(vector<vector<int>>& board,int row,int col,int n){
+    for(int i=0;i<col;i++){
+        if(board[row][i])return false;
+    }
+    for(int i =row,j=col;i>=0&&j>=0;i--,j--){
+        if(board[i][j])return false;
+    }
+    for(int i =row,j=col;i<n&&j>=0;i++,j--){
+        if(board[i][j])return false;
+    }
+    return true;
+}
+bool solveQueen(vector<vector<int>>& board,int col,int n){
+    if(col == n){
+        return true;
+    }
+    for(int row = 0;row<n;row++){
+        if(isSafe(board,row,col,n)){
+            board[row][col]=1;
+            if(solveQueen(board,col+1,n)){
+                return true;
+            }
+            board[row][col]=0;
+        }
+    }
+    return false;
+}
+int main(){
+    int n =4;
+    vector<vector<int>> board(n,vector<int>(n,0));
+    if(solveQueen(board,0,n)){
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                cout<<(board[i][j]?"Q ":"- ");
+            }
+            cout<<endl;
+        }
+    }
+    return 0;
+}
+
+//"Navie algorithm"
+#include <iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+void naive(string text,string pat) {
+    int n=text.size();
+    int m=pat.size();
+    int i,j;
+    for(i=0;i<n;i++) {
+        for(j=0;j<m;j++) {
+            if(text[i+j]!=pat[j]) {
+                break;
+            }
+        }
+        if(j==m) {
+            cout<<i<<" ";
+        }
+    }
+}
+int main() {
+    string s="ABCESABCAEABC";
+    string k="ABC";
+    naive(s,k);
+    return 0;
+}
+
+// SIEVEOFSUNDHARAM:
+// Backtracking----
+#include<iostream>
+#include<vector>
+using namespace std;
+void sieveOfSundharam(int n) {
+    vector<bool> marked(n,false);
+    for(int i =1;i<n;i++){
+        for(int j =1;j+i+(2*i*j)<n;i++) {
+            marked[i+j+(2*i*j)]=true;
+        }
+    }
+    if(n>=2) {
+        cout<<2<<" ";
+    }
+    for(int i =1;i<n;i++) {
+        if(marked[i]==false && 2*i+1<n) {
+            cout<<2*i+1<<" ";
+        }
+    }
+}
+int main() {
+    int n=20;
+    sieveOfSundharam(n);
+    return 0;
+}
+
+//dynamic
+using Kadane’s Algorithm.
+#include <bits/stdc++.h>
+using namespace std;
+int maxSubArr(vector<int> &nums) {
+ 	int n = nums.size();
+ 	int maxSum = INT_MIN, currentSum = 0;
+ 	for (int i = 0; i < n; i++) {
+ 		if (nums[i] < -10000 || nums[i] > 10000) {
+ 			cout << "Invalid input" << endl;
+ 			return 0;
+		 }
+ 		currentSum += nums[i];
+ 		maxSum = max(maxSum, currentSum);
+ 		if (currentSum < 0) currentSum = 0;
+ 	}
+ 	return maxSum;
+}
+int main() {
+ 	int n;
+ 	cin >> n;
+ 	if (n < 1 || n > 100000) {
+ 		cout << "Invalid input" << endl;
+ 		return 0;
+ 	}
+ 	vector<int> nums(n);
+ 	for (int i = 0; i < n; i++) {
+ 		cin >> nums[i];
+ 	}
+ 	cout << maxSubArr(nums) << endl;
+ 	return 0;
+}
+
+
+//Kruskal Algorithm
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+struct Edge {
+    int src, dest, weight;
+};
+// Function to find the parent of a node (for disjoint set)
+int find(vector<int>& parent, int i) {
+    if (parent[i] == i)
+        return i;
+    return parent[i] = find(parent, parent[i]); // Path compression
+}
+// Function to perform union of two sets (for disjoint set)
+void unionSets(vector<int>& parent, int x, int y) {
+    int xset = find(parent, x);
+    int yset = find(parent, y);
+    parent[xset] = yset;
+}
+// Function to implement Kruskal's algorithm
+int kruskalMSTCost(vector<Edge>& edges, int vertices) {
+    sort(edges.begin(), edges.end(), [](const Edge& a, const Edge& b) {
+        return a.weight < b.weight;
+    });
+    vector<int> parent(vertices);
+    for (int i = 0; i < vertices; ++i) {
+        parent[i] = i; // Initialize each node as its own parent
+    }
+    int totalCost = 0; // Initialize total cost
+    for (const auto& edge : edges) {
+        int srcParent = find(parent, edge.src);
+        int destParent = find(parent, edge.dest);
+        if (srcParent != destParent) {
+            unionSets(parent, srcParent, destParent);
+            totalCost += edge.weight; // Add edge weight to total cost
+        }
+    }
+    return totalCost; // Return only total cost
+}
+int main() {
+    int vertices = 4;
+    vector<Edge> edges = {
+        {0, 1, 10},
+        {0, 2, 6},
+        {0, 3, 5},
+        {1, 3, 15},
+        {2, 3, 4}
+    };
+    int totalCost = kruskalMSTCost(edges, vertices);
+    cout << "Total cost of MST: " << totalCost << endl; // Print total cost
+    return 0;
+}
+
+
+//Max Flow Min cut Algorithm
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <climits>
+#include <algorithm>
+using namespace std;
+bool bfs(const vector<vector<int>>& residualGraph, int s, int t, vector<int>& parent) {
+    int n = residualGraph.size();
+    vector<bool> visited(n, false);
+    queue<int> q;
+    q.push(s);
+    visited[s] = true;
+    parent[s] = -1;
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+        for (int v = 0; v < n; ++v) {
+            if (!visited[v] && residualGraph[u][v] > 0) {
+                q.push(v);
+                parent[v] = u;
+                visited[v] = true;
+            }
+        }
+    }
+    return visited[t];
+}
+int maxFlowMinCut(vector<vector<int>>& graph, int s, int t) {
+    int n = graph.size();
+    vector<vector<int>> residualGraph = graph;
+    vector<int> parent(n);
+    int maxFlow = 0;
+    while (bfs(residualGraph, s, t, parent)) {
+        int pathFlow = INT_MAX;
+        for (int v = t; v != s; v = parent[v]) {
+            int u = parent[v];
+            pathFlow = min(pathFlow, residualGraph[u][v]);
+        }
+        for (int v = t; v != s; v = parent[v]) {
+            int u = parent[v];
+            residualGraph[u][v] -= pathFlow;
+            residualGraph[v][u] += pathFlow;
+        }
+        maxFlow += pathFlow;
+    }
+    return maxFlow;
+}
+int main() {
+    int n, m;
+    if (!(cin >> n >> m) || n <= 0 || m < 0) {
+        cout << "Invalid input" << endl;
+        return 1;
+    }
+    vector<vector<int>> graph(n, vector<int>(n, 0));
+    for (int i = 0; i < m; ++i) {
+        int u, v, capacity;
+        if (!(cin >> u >> v >> capacity) || u < 1 || u > n || v < 1 || v > n || capacity < 0) {
+            cerr << "Invalid input" << endl;
+            return 1;
+        }
+        graph[u - 1][v - 1] = capacity; // Adjust for 0-based indexing
+    }
+    int s, t;
+    if (!(cin >> s >> t) || s < 1 || s > n || t < 1 || t > n || s == t) {
+        cerr << "Invalid input";
+        return 1;
+    }
+    int maxFlow = maxFlowMinCut(graph, s - 1, t - 1); // Adjust for 0-based indexing
+    cout << maxFlow << endl;
+    // Finding minimum cut is also possible, but it requires additional code to find reachable nodes from source.
+    return 0;
+}
+
+#include <iostream>
+#include <vector>
+#include <climits>
+
+using namespace std;
+
+// Pair to store destination vertex and weight
+typedef pair<int, int> Pair;
+
+// Function to implement Prim's algorithm without a priority queue
+vector<Pair> primMST(vector<vector<Pair>>& adj, int vertices) {
+    vector<Pair> mst;
+    vector<int> key(vertices, INT_MAX);
+    vector<int> parent(vertices, -1);
+    vector<bool> inMST(vertices, false);
+
+    int src = 0; // Start from vertex 0
+    key[src] = 0;
+
+    for (int count = 0; count < vertices - 1; ++count) {
+        // Find the vertex with the minimum key value
+        int minKey = INT_MAX, u;
+        for (int v = 0; v < vertices; ++v) {
+            if (inMST[v] == false && key[v] < minKey) {
+                minKey = key[v];
+                u = v;
+            }
+        }
+
+        inMST[u] = true;
+
+        for (auto& neighbor : adj[u]) {
+            int v = neighbor.first;
+            int weight = neighbor.second;
+
+            if (inMST[v] == false && weight < key[v]) {
+                parent[v] = u;
+                key[v] = weight;
+            }
+        }
+    }
+
+    // Construct the MST edges
+    for (int i = 1; i < vertices; ++i) {
+        mst.push_back(make_pair(parent[i], i));
+    }
+
+    return mst;
+}
+
+int main() {
+    int vertices = 5;
+    vector<vector<Pair>> adj(vertices);
+
+    // Example graph (adjacency list)
+    adj[0].push_back(make_pair(1, 2));
+    adj[0].push_back(make_pair(3, 6));
+    adj[1].push_back(make_pair(0, 2));
+    adj[1].push_back(make_pair(2, 3));
+    adj[1].push_back(make_pair(3, 8));
+    adj[1].push_back(make_pair(4, 5));
+    adj[2].push_back(make_pair(1, 3));
+    adj[2].push_back(make_pair(4, 7));
+    adj[3].push_back(make_pair(0, 6));
+    adj[3].push_back(make_pair(1, 8));
+    adj[3].push_back(make_pair(4, 9));
+    adj[4].push_back(make_pair(1, 5));
+    adj[4].push_back(make_pair(2, 7));
+    adj[4].push_back(make_pair(3, 9));
+
+    vector<Pair> mst = primMST(adj, vertices);
+
+    cout << "Edges in Minimum Spanning Tree:" << endl;
+    for (const auto& edge : mst) {
+        cout << edge.first << " -- " << edge.second << endl;
+    }
+
+    return 0;
+}
