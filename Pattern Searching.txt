@@ -1,0 +1,179 @@
+Pattern Searching
+
+Longest Palindromic Subsequence :
+
+#include <bits/stdc++.h>
+using namespace std;
+bool isValidInput(const string &str) {
+    for (char c : str) {
+        if (c < 'a' || c > 'z') {
+            return false;
+        }
+    }
+    return true;
+}
+string expandAroundCenter(const string &s, int left, int right) {
+    while (left >= 0 && right < s.length() && s[left] == s[right]) {
+        left--;
+        right++;
+    }
+    return s.substr(left + 1, right - left - 1);
+}
+string longestPalindromicSubstring(const string &s) {
+    string longest = "";
+    for (int i = 0; i < s.length(); i++) {
+        string oddPal = expandAroundCenter(s, i, i);
+        if (oddPal.length() > longest.length()) {
+            longest = oddPal;
+        }
+        string evenPal = expandAroundCenter(s, i, i + 1);
+        if (evenPal.length() > longest.length()) {
+            longest = evenPal;
+        }
+    }
+    return longest;
+}
+int main() {
+    string str;
+    cin >> str;
+    if (!isValidInput(str)) {
+        cout << "Invalid input" << endl;
+    } else {
+        cout << longestPalindromicSubstring(str) << endl;
+    }
+    return 0;
+}
+
+
+KMP algorithm:
+
+#include<bits/stdc++.h>
+using namespace std;
+vector<int>computelpsArray(string pattern)
+{
+    int m=pattern.size();
+    vector<int>lps(m,0);
+    int len=0;
+    int i=1;
+    while(i<m)
+    {
+        if(pattern[i]==pattern[len])
+        {
+            len++;
+            lps[i]=len;
+            i++;
+        }
+        else
+        {
+            if(len!=0)
+            len=lps[len-1];
+            else
+            {
+                lps[i]=0;
+                i++;
+            }
+        }
+    }
+    return lps;
+}
+vector<int>kmpsearch(string text,string pattern)
+{
+    int n=text.size();
+    int m=pattern.size();
+    vector<int>lps=computelpsArray(pattern);
+    vector<int>result;
+    
+    int i=0;
+    int j=0;
+    while(i<n)
+    {
+        if(text[i]==pattern[j])
+        {
+            i++;
+            j++;
+        }
+        if(j==m)
+        {
+            result.push_back(i-j);
+            j=lps[j-1];
+        }
+        else if(i<n && pattern[j]!=text[i])
+        {
+            if(j!=0)
+            j=lps[j-1];
+            else
+            i++;
+        }
+    }
+    return result;
+}
+int main()
+{
+    string text,pattern;
+    cin>>text;
+    cin>>pattern;
+    vector<int>matches=kmpsearch(text,pattern);
+    if(matches.empty())
+    cout<<"No match found";
+    else
+    cout<<matches[0];
+    return 0;
+}
+
+
+//KMP replace words in string problem
+
+#include<bits/stdc++.h>
+using namespace std;
+vector<int>bpt(const string& pattern){
+    vector<int> pT(pattern.size(),0);
+    int j=0;
+    for(int i=1;i<pattern.size();i++){
+        while(j>0&& pattern[i]!=pattern[j]){
+            j=pT[j-1];
+        }if(pattern[i]==pattern[j]){
+            j++;
+        }pT[i]=j;
+    }return pT;
+}vector<int>find(const string& text,const string& pattern){
+    vector<int>pT=bpt(pattern);
+    vector<int> occ;
+    int j=0;
+    for(int i=0;i<text.size();i++){
+        while(j>0&&text[i]!=pattern[j]){
+            j=pT[j-1];
+        }if(text[i]==pattern[j]){
+            j++;
+        }if(j==pattern.size()){
+            occ.push_back(i-j+1);
+            j=pT[j-1];
+        }
+    }return occ;
+}
+string replace(const string& text,const string& pattern, const string& replacement){
+    vector<int> occ=find(text,pattern);
+    if(occ.empty()){
+        return text;
+    }string result;
+    int lastPos=0;
+    for(int i=0;i<occ.size();i++){
+        result.append(text,lastPos,occ[i]-lastPos);
+        result.append(replacement);
+        lastPos=occ[i]+pattern.size();
+    }result.append(text,lastPos,text.size()-lastPos);
+    return result;
+}
+int main(){
+    string text,pattern,replacement;
+    getline(cin,text);
+    getline(cin,pattern);
+    getline(cin,replacement);
+    if(text.empty()||pattern.empty()){
+        cout<<"Invalid input"<<endl;
+    }else{
+        string modified=replace(text,pattern,replacement);
+        cout<<modified<<endl;
+    }
+    
+}
+

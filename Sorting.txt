@@ -1,0 +1,203 @@
+Sorting:
+
+Insertion sort:
+
+#include <iostream>
+using namespace std;
+int main(){
+    int n;
+    cin>>n;
+    bool found = false;
+    int a[n];
+    for(int i=0;i<n;i++){
+        if(!(cin>>a[i])){
+            cout<<"Invalid input";
+            return 0;
+        }
+    }
+    int key;
+    
+    for(int i=1;i<n;i++){
+        int key=a[i];
+        int j=i-1;
+        while(j>=0 && a[j]>key){
+            a[j+1]=a[j];
+            j--;
+            found=true;
+        }
+        a[j+1]=key;
+        
+    }
+    if(found == false){
+        cout<<"-1";
+        return 0;
+    }
+    for(int i: a){
+        cout<<i<<" ";
+    }
+}
+
+Selection sort:
+
+#include <iostream>
+using namespace std;
+int main(){
+    int n;
+    cin>>n;
+    if(n<=0){
+        cout<<"Invalid input";
+        return 0;
+    }
+    int a[n];
+    for(int i=0;i<n;i++){
+        if(!(cin>>a[i])){
+            cout<<"Invalid input";
+            return 0;
+        }
+    }
+    int k;
+    cin>>k;
+    if(k<0||k>=n){
+        cout<<"Invalid input";
+        return 0;
+    }
+    bool same=true;
+    for(int i=1;i<n;i++){
+        if(a[i]!=a[0]){
+            same=false;
+            break;
+        }
+    }
+    if(same){
+        cout<<"-1";
+        return 0;
+    }
+    for(int i=1;i<=n-1;i++){
+        int temp=i;
+        for(int j=i+1;j<n;j++){
+            if(a[temp]>a[j]){
+                temp=j;
+            }
+        }
+        swap(a[temp], a[i]);
+    }
+    cout<<a[k]<<endl;
+}
+
+Merge sort:
+
+#include <iostream>
+using namespace std;
+void merge(int arr[], int left, int mid,  int right){
+    int n1=mid-left+1;
+    int n2=right-mid;
+    int leftArr[n1], rightArr[n2];
+    for(int i=0;i<n1;i++) leftArr[i]=arr[left+i];
+    for(int i=0;i<n2;i++) rightArr[i]= arr[mid + 1 + i];
+    int i=0,j=0,k=left;
+    while(i<n1 && j<n2){
+        if(leftArr[i]<=rightArr[j]){
+            arr[k]=leftArr[i];
+            i++;
+        }
+        else{
+            arr[k]=rightArr[j];
+            j++;
+        }
+        k++;
+    }
+    while(i<n1){
+        arr[k]=leftArr[i];
+        i++;
+        k++;
+    }
+    while(j<n2){
+        arr[k]=rightArr[j];
+        j++;
+        k++;
+    }
+}
+void mergeSort(int arr[], int left, int right){
+    if(left<right){
+        int mid=left+(right-left)/2;
+        mergeSort(arr,left,mid);
+        mergeSort(arr,mid+1,right);
+        merge(arr,left,mid,right);
+    }
+}
+bool isSorted(int arr[], int n){
+    for(int i=1;i<n;i++){
+        if(arr[i]<arr[i-1]){
+            return false;
+        }
+    }
+    return true;
+}
+int main(){
+    int n;
+    cin>>n;
+    
+    if(n<1 || n>100){
+        cout<<"Invalid input"<<endl;
+        return 0;
+    }
+    
+    int arr[n];
+    
+    for(int i=0;i<n;i++){
+        if(!(cin>>arr[i])){
+            cout<<"Invalid input"<<endl;
+            return 0;
+        }
+    }
+    
+    if(isSorted(arr,n)){
+        cout<<"-1"<<endl;
+        return 0;
+    }
+    
+    mergeSort(arr,0,n-1);
+    
+    for(int i=0;i<n;i++){
+        cout<<arr[i]<<" ";
+    }
+    cout<<endl;
+    
+    return 0;
+}
+
+Quick sort:
+
+#include<bits/stdc++.h>
+using namespace std;
+int partition(int arr[],int low,int high){
+    int pivot=arr[high];
+    int i=low-1;
+    for(int j=low;j<high;j++){
+        if(arr[j]<pivot){
+            i++;
+            swap(arr[i],arr[j]);
+        }
+    }
+    swap(arr[i+1],arr[high]);
+    return i+1;
+}
+void quickSort(int arr[],int low,int high){
+    if(low<high){
+        int pivot=partition(arr,low,high);
+        quickSort(arr,low,pivot-1);
+        quickSort(arr,pivot+1,high);
+    }
+}
+int main(){
+    int n;
+    cin>>n;
+    int arr[n];
+    for(int i=0;i<n;i++){
+        cin>>arr[i];
+    }
+    quickSort(arr,0,n-1);
+    for(int i=0;i<n;i++){
+        cout<<arr[i]<<" ";
+    }
+}

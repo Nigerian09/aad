@@ -1,0 +1,384 @@
+Dynamic Programming:
+
+TOH
+
+#include<bits/stdc++.h>
+using namespace std;
+void towerOfHanoi(int plates,char source,char destination,char auxillary){
+    if(plates==1){
+        cout<<"Move 1 Box From "<<source<<" to "<<destination<<endl;
+    }
+    else{
+        towerOfHanoi(plates-1,source,auxillary,destination);
+        cout<<"Move 1 Box From "<<source<<" to "<<destination<<endl;
+        towerOfHanoi(plates-1,auxillary,destination,source);
+     
+    }
+}
+int main(){
+    int plates;
+    if(!(cin>>plates)){
+        cout<<"Invalid input";
+        return 0;
+    }
+    if(plates<=0){
+        cout<<-1;
+        return 0;
+    }
+    towerOfHanoi(plates,'S','D','A');
+    return 0;
+}
+
+
+LIS:
+
+#include <bits/stdc++.h>
+using namespace std;
+bool isValidInput(const string& input) {
+    stringstream ss(input);
+    int num;
+    while (ss >> num) {
+    }
+    return ss.eof(); 
+}
+
+void findLongestIncreasingSequence(vector<int>& heights, int n) {
+    if (n == 0) {
+        cout << "Invalid input" << endl;
+        return;
+    }
+    
+    vector<int> dp(n, 1); 
+    vector<int> sum(n, 0); 
+    int maxLength = 1;
+    int maxSum = heights[0];
+    
+    dp[0] = 1;
+    sum[0] = heights[0];
+    
+    for (int i = 1; i < n; i++) {
+        dp[i] = 1;
+        sum[i] = heights[i];
+        
+        for (int j = 0; j < i; j++) {
+            if (heights[i] > heights[j] && dp[i] < dp[j] + 1) {
+                dp[i] = dp[j] + 1;
+                sum[i] = sum[j] + heights[i];
+            }
+        }
+        
+        if (dp[i] > maxLength) {
+            maxLength = dp[i];
+            maxSum = sum[i];
+        } else if (dp[i] == maxLength) {
+            maxSum = max(maxSum, sum[i]);
+        }
+    }
+    
+    cout << maxLength << endl;
+    cout << maxSum << endl;
+}
+
+int main() {
+    string nInput;
+    string heightsInput;
+    
+    getline(cin, nInput);
+    getline(cin, heightsInput);
+    if (!isValidInput(nInput)) {
+        cout << "Invalid input" << endl;
+        return 0;
+    }
+    
+    int n = stoi(nInput);
+    stringstream ss(heightsInput);
+    vector<int> heights;
+    int height;
+    
+    while (ss >> height) {
+        heights.push_back(height);
+    }
+    
+    if (heights.size() != n) {
+        cout << "Invalid input" << endl;
+        return 0;
+    }
+    findLongestIncreasingSequence(heights, n);
+    
+    return 0;
+}
+
+LCS:
+
+#include<bits/stdc++.h>
+using namespace std;
+int find(vector<int>& costs, string str1, string str2) {
+    int n = str1.size();
+    int m = str2.size();
+    if(costs.size()!=n+m) {
+        return -1;
+    }
+    vector<vector<int>> dp(n+1, vector<int>(m+1,0));
+    for(int i=1;i<=n;i++) {
+        for(int j=1;j<=m;j++) {
+            if(str1[i-1] == str2[j-1]) {
+                dp[i][j] = 1+dp[i-1][j-1];
+            }
+            else {
+                dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
+            }
+        }
+    }
+    return dp[n][m];
+}
+int main() {
+    string str1, str2;
+    cin>>str1>>str2;
+    vector<int>costs;
+    int val;
+    while(cin>>val) {
+        costs.push_back(val);
+        if(val>100) {
+            cout<<"Invalid input";
+            return 0;
+        }
+    }
+    int result = find(costs, str1, str2);
+    if(result==-1) {
+        cout<<"Invalid input";
+        return 0;
+    }
+    else {
+        cout<<result;
+    }
+    return 0;
+}
+
+
+//find length 
+#include<bits/stdc++.>
+using namespace std;
+vector<string> splitPlaylist(const string& input) {
+    vector<string> playlist;
+    stringstream ss(input);
+    string song;
+    
+    while (ss >> song) {
+        playlist.push_back(song);
+    }
+    
+    return playlist;
+}
+bool isValidPlaylist(const vector<string>& playlist) {
+    for (const string& song : playlist) {
+        for (char ch : song) {
+            if (!isalnum(ch)) return false;
+        }
+    }
+    return true;
+}
+int longestCommonSubsequence(const vector<string>& playlist1, const vector<string>& playlist2) {
+    int m = playlist1.size(), n = playlist2.size();
+    vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+    
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            if (playlist1[i - 1] == playlist2[j - 1]) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            } else {
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+    
+    return dp[m][n];
+}
+
+int main() {
+    string input1, input2;
+    if (!(getline(cin, input1) && getline(cin, input2))) {
+        cout << "Invalid input" << endl;
+        return 0;
+    }
+    vector<string> playlist1 = splitPlaylist(input1);
+    vector<string> playlist2 = splitPlaylist(input2);
+    if (!isValidPlaylist(playlist1) || !isValidPlaylist(playlist2)) {
+        cout << "Invalid input" << endl;
+        return 0;
+    }
+    cout << longestCommonSubsequence(playlist1, playlist2) << endl;
+    return 0;
+}
+
+
+#include<bits/tsdc++.h>
+using namespace std;
+int lcs(string str1, string str2) {
+    int m = str1.size(), n = str2.size();
+    vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+    
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            if (str1[i - 1] == str2[j - 1]) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            } else {
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+    
+    return dp[m][n];
+}
+
+bool isValidInput(const string& str) {
+    for (char ch : str) {
+        if (!isalpha(ch)) return false;
+    }
+    return true;
+}
+
+int main() {
+    string str1, str2;
+    if (!(getline(cin, str1) && getline(cin, str2))) {
+        cout << "Invalid input" << endl;
+        return 0;
+    }
+    if (!isValidInput(str1) || !isValidInput(str2)) {
+        cout << "Invalid input" << endl;
+        return 0;
+    }
+    cout << lcs(str1, str2) << endl;
+    
+    return 0;
+}
+
+
+LPS:
+
+#include<bits/stdc++.h>
+using namespace std;
+bool isValidInput(const string &s) {
+    for (char c : s) {
+        if (!islower(c)) return false; 
+    }
+    return true;
+}
+int findLPS(const string &artifact) {
+    int n = artifact.length();
+    vector<vector<int>> dp(n, vector<int>(n, 0));
+    for (int i = 0; i < n; i++) {
+        dp[i][i] = 1;
+    }
+    for (int len = 2; len <= n; len++) {
+        for (int i = 0; i <= n - len; i++) {
+            int j = i + len - 1;
+            if (artifact[i] == artifact[j]) {
+                dp[i][j] = 2 + dp[i + 1][j - 1];
+            } else {
+                dp[i][j] = max(dp[i + 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+    
+    return dp[0][n - 1]; 
+}
+
+int main() {
+    string artifact;
+    cin >> artifact;
+    if (!isValidInput(artifact)) {
+        cout << "Invalid input" << endl;
+    } else {
+        cout << findLPS(artifact) << endl;
+    }
+    return 0;
+}
+
+Subset count:
+
+#include <iostream>
+#include <vector>
+using namespace std;
+int countSubsets(vector<int>& nums, int n, int target) {
+    if (target == 0) return 1;
+    if (n == 0 || target < 0) return 0;
+    return countSubsets(nums, n - 1, target) + countSubsets(nums, n - 1, target - nums[n - 1]);
+}
+int countSubsetsWithSum(vector<int>& nums, int target) {
+    for (int num : nums) {
+        if (num < 0) {
+            cout << "Invalid input" << endl;
+            return -1;
+        }
+    }
+    return countSubsets(nums, nums.size(), target);
+}
+int main() {
+    int n, target;
+    cin >> n;
+    
+    vector<int> nums(n);
+    for (int i = 0; i < n; i++) {
+        cin >> nums[i];
+        if (nums[i] < 0) {
+            cout << "Invalid input" << endl;
+            return 0;
+        }
+    }
+    cin >> target;
+    int result = countSubsetsWithSum(nums, target);
+    if (result != -1) {
+        cout << result << endl;
+    }
+    return 0;
+}
+
+maximal sq matrix:
+
+#include <bits/stdc++.h>
+using namespace std;
+void maximalSquareWithCoordinates(vector<vector<int>>& matrix) {
+    int m = matrix.size(), n = matrix[0].size();
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (matrix[i][j] < 0) {
+                cout << "Invalid input" << endl;
+                return;
+            }
+        }
+    }
+    
+    vector<vector<int>> dp(m, vector<int>(n, 0));
+    int maxSize = 0, row = 0, col = 0;
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (matrix[i][j] == 1) {
+                if (i == 0 || j == 0) {
+                    dp[i][j] = 1;
+                } else {
+                    dp[i][j] = min({dp[i-1][j], dp[i][j-1], dp[i-1][j-1]}) + 1;
+                }
+                
+                if (dp[i][j] > maxSize) {
+                    maxSize = dp[i][j];
+                    row = i - maxSize + 1;
+                    col = j - maxSize + 1;
+                }
+            }
+        }
+    }
+    
+    cout << maxSize << " " << row << " " << col << endl;
+}
+int main() {
+    int m, n;
+    cin >> m >> n;
+    vector<vector<int>> matrix(m, vector<int>(n));
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            cin >> matrix[i][j];
+        }
+    }
+    maximalSquareWithCoordinates(matrix);
+    return 0;
+}

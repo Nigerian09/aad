@@ -1,0 +1,193 @@
+Shortest Path:
+
+Floyd Warshall’s Algorithm:
+
+#include <bits/stdc++.h>
+using namespace std;
+void floydWarshall(int V, int T, vector<vector<int>> &adjMatrix) {
+    if (V < 0) {
+        cout << "Invalid input" << endl;
+        return;
+    }
+      const int INF = numeric_limits<int>::max();
+    vector<vector<int>> dist(V, vector<int>(V, INF));
+        for (int i = 0; i < V; i++) {
+        for (int j = 0; j < V; j++) {
+            if (i == j) dist[i][j] = 0;
+            else if (adjMatrix[i][j] != 0) dist[i][j] = adjMatrix[i][j];
+        }
+    }
+        for (int k = 0; k < V; k++) {
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                if (dist[i][k] != INF && dist[k][j] != INF && dist[i][k] + dist[k][j] < dist[i][j]) {
+                    dist[i][j] = dist[i][k] + dist[k][j];
+                }
+            }
+        }
+    }
+        int count = 0;
+    for (int i = 0; i < V; i++) {
+        for (int j = 0; j < V; j++) {
+            if (i != j && dist[i][j] <= T) count++;
+        }
+    }
+        cout << count << endl;
+}
+int main() {
+    int V, T;
+    cin >> V;
+    if (V < 0) {
+        cout << "Invalid input" << endl;
+        return 0;
+    }
+    cin >> T;
+        vector<vector<int>> adjMatrix(V, vector<int>(V));
+        for (int i = 0; i < V; i++) {
+        for (int j = 0; j < V; j++) {
+            cin >> adjMatrix[i][j];
+        }
+    }
+        floydWarshall(V, T, adjMatrix);
+    return 0;
+}
+
+//Shortest distance between vertex a and b 
+
+#include <iostream>
+#include <vector>
+using namespace std;
+const int INF = 1e9;
+int main() {
+    int n;
+    cin >> n;
+    if (n < 0) {
+        cout << "Invalid input" << endl;
+        return 0;
+    }
+    vector<vector<int>> dist(n, vector<int>(n));
+    for (int i = 0; i < n; i++)
+    for (int j = 0; j < n; j++) {
+        cin >> dist[i][j];
+        if (dist[i][j] == -1) dist[i][j] = INF;
+        if (i == j) dist[i][j] = 0;
+    }
+    for (int k = 0; k < n; k++)
+    for (int i = 0; i < n; i++)
+    for (int j = 0; j < n; j++)
+    if (dist[i][k] < INF && dist[k][j] < INF)
+    dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
+    int q;
+    cin >> q;
+    while (q--) {
+        int a, b;
+        cin >> a >> b;
+        cout << (dist[a][b] == INF ? "-1" : to_string(dist[a][b])) << endl;
+    }
+}
+
+
+#include<bits/stdc++.h>
+using namespace std;
+void floyd(vector<vector<int>> &graph){
+    int n=graph.size();
+    for(int k=0;k<n;k++){
+        for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+        
+                if(graph[i][k]!=INT_MAX && graph[k][j]!=INT_MAX && graph[i][j]>graph[i][k]+graph[k][j]){
+                    graph[i][j]=graph[i][k]+graph[k][j];
+                }
+            }
+        }
+    }
+}
+
+int main(){
+    int n;
+    cin>>n;
+    vector<vector<int>> graph(n,vector<int>(n));
+    
+    
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+        cin>>graph[i][j];
+        if(graph[i][j]==-1 && i!=j){
+         graph[i][j]=INT_MAX;   
+        }
+        }
+    }
+    
+    
+    
+    floyd(graph);
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            if(graph[i][j]==INT_MAX){
+                cout<<"-1";
+            }else{
+                cout<<graph[i][j]<<" ";
+            }
+        }
+        cout<<endl;
+    }
+    return 0;
+}
+
+
+
+
+
+Dijkstra's algorithm:
+
+#include <bits/stdc++.h>
+using namespace std;
+void dijkstra(int n, int m, vector<vector<pair<int, int>>> &graph, int s) {
+    if (n < 0) {
+        cout << "Invalid input" << endl;
+        return;
+    }
+    vector<int> dist(n, numeric_limits<int>::max());
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    dist[s] = 0;
+    pq.push({0, s});
+    while (!pq.empty()) {
+        int d = pq.top().first, u = pq.top().second;
+        pq.pop();
+        if (d > dist[u]) continue;
+        for (const auto &edge : graph[u]) {
+            int v = edge.first, w = edge.second;
+            if (dist[u] + w < dist[v]) {
+                dist[v] = dist[u] + w;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+    for (int i = 0; i < n; i++) {
+        if (dist[i] == numeric_limits<int>::max())
+        cout << "Unreachable" << endl;
+        else
+        cout << dist[i] << endl;
+    }
+}
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    if (n < 0) {
+        cout << "Invalid input" << endl;
+        return 0;
+    }
+    vector<vector<pair<int, int>>> graph(n);
+    for (int i = 0; i < m; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        graph[u].push_back({v, w});
+        graph[v].push_back({u, w});
+    }
+    int s;
+    cin >> s;
+    dijkstra(n, m, graph, s);
+    return 0;
+}
+

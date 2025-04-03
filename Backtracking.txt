@@ -1,0 +1,388 @@
+Rat in maze:
+
+#include <bits/stdc++.h>
+using namespace std;
+void findPaths(vector<vector<int>>& maze, int x, int y, int N, string path, vector<string>& paths, vector<vector<bool>>& visited) {
+    if (x == N - 1 && y == N - 1) {  
+    paths.push_back(path);
+    return;
+    }
+    static int dx[] = {1, 0, 0, -1};
+    static int dy[] = {0, -1, 1, 0};
+    static char dir[] = {'D', 'L', 'R', 'U'};
+    
+    for (int i = 0; i < 4; i++) {
+        int newX = x + dx[i];
+        int newY = y + dy[i];
+        if (newX >= 0 && newX < N && newY >= 0 && newY < N && maze[newX][newY] == 1 && !visited[newX][newY]) {
+            visited[newX][newY] = true;
+            findPaths(maze, newX, newY, N, path + dir[i], paths, visited);
+            visited[newX][newY] = false; 
+        }
+    }
+}
+
+void solveMaze(vector<vector<int>>& maze, int N) {
+    if (N <= 0) {
+        cout << "Invalid input" << endl;
+        return;
+    }
+    if (maze[0][0] == 0 || maze[N-1][N-1] == 0) {
+        cout << "No solution exists" << endl;
+        return;
+    }
+    
+    vector<string> paths;
+    vector<vector<bool>> visited(N, vector<bool>(N, false));
+    visited[0][0] = true;
+    
+    findPaths(maze, 0, 0, N, "", paths, visited);
+    
+    if (paths.empty()) {
+        cout << "No solution exists" << endl;
+    } else {
+        sort(paths.begin(), paths.end()); 
+        for (const string& path : paths) {
+            cout << path << endl;
+        }
+        cout << endl;
+    }
+}
+int main() {
+    int N;
+    cin >> N;
+    
+    if (cin.fail() || N <= 0) { 
+    cout << "Invalid input" << endl;
+    return 0;
+    }
+    vector<vector<int>> maze(N, vector<int>(N));
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            cin >> maze[i][j];
+            if (cin.fail() || (maze[i][j] != 0 && maze[i][j] != 1)) { // Check for non-integer or invalid values
+            cout << "Invalid input" << endl;
+            return 0;
+            }
+        }
+    }
+    solveMaze(maze, N);
+    return 0;
+}
+
+
+
+Subset sum:
+
+#include <bits/stdc++.h>
+using namespace std;
+bool isSubsetSum(vector<int>& nums, int n, int target, int index = 0) {
+    if (target == 0) return true; 
+    if (index >= n || target < 0) return false;
+    return isSubsetSum(nums, n, target - nums[index], index + 1) ||
+    isSubsetSum(nums, n, target, index + 1);
+}
+int main() {
+    int n, target;
+    cin >> n >> target;
+    
+    if (cin.fail() || n <= 0 || n > 20 || target < 1 || target > 10000) {
+        cout << "Invalid input" << endl;
+        return 0;
+    }
+    vector<int> nums(n);
+    for (int i = 0; i < n; i++) {
+        cin >> nums[i];
+        if (cin.fail() || nums[i] < 1 || nums[i] > 1000) {
+            cout << "Invalid input" << endl;
+            return 0;
+        }
+    }
+    cout << (isSubsetSum(nums, n, target) ? "Yes" : "No") << endl;
+    return 0;
+}
+
+
+N Queen:
+
+Prints all combinations:
+#include <iostream>
+#include <vector>
+using namespace std;
+
+void printSolution(vector<vector<int>> &board, int N) {
+    for (auto &row : board) {
+        for (int cell : row)
+            cout << (cell ? "Q " : ". ");
+        cout << "\n";
+    }
+    cout << "\n";
+}
+
+bool isSafe(vector<vector<int>> &board, int row, int col, int N) {
+    for (int i = 0; i < col; i++)
+        if (board[row][i]) return false;
+
+    for (int i = row, j = col; i >= 0 && j >= 0; i--, j--)
+        if (board[i][j]) return false;
+
+    for (int i = row, j = col; i < N && j >= 0; i++, j--)
+        if (board[i][j]) return false;
+
+    return true;
+}
+
+void solveNQueens(vector<vector<int>> &board, int col, int N) {
+    if (col >= N) {
+        printSolution(board, N);
+        return;
+    }
+    
+    for (int i = 0; i < N; i++) {
+        if (isSafe(board, i, col, N)) {
+            board[i][col] = 1;
+            solveNQueens(board, col + 1, N);
+            board[i][col] = 0;
+        }
+    }
+}
+
+int main() {
+    int N;
+    cin >> N;
+    
+    if (N < 1 || N > 8) {
+        cout << "Invalid input";
+        return 0;
+    }
+    
+    if (N == 2 || N == 3) {
+        cout << "No solution";
+        return 0;
+    }
+
+    vector<vector<int>> board(N, vector<int>(N, 0));
+    solveNQueens(board, 0, N);
+
+    return 0;
+}
+
+Prints one solution:
+// editor5
+#include <iostream>
+#include <vector>
+using namespace std;
+
+bool isSafe(vector<vector<int>> &board, int row, int col, int N) {
+    for (int i = 0; i < col; i++)
+    if (board[row][i]) return false;
+    for (int i = row, j = col; i >= 0 && j >= 0; i--, j--)
+    if (board[i][j]) return false;
+    for (int i = row, j = col; i < N && j >= 0; i++, j--)
+    if (board[i][j]) return false;
+    return true;
+}
+
+bool solveNQueens(vector<vector<int>> &board, int col, int N) {
+    if (col >= N) {
+        return true;
+    }
+    for (int i = 0; i < N; i++) {
+        if (isSafe(board, i, col, N)) {
+            board[i][col] = 1;
+            if (solveNQueens(board, col + 1, N)) return true;
+            board[i][col] = 0;
+        }
+    }
+    return false;
+}
+
+void printSolution(vector<vector<int>> &board, int N) {
+    for (auto &row : board) {
+        for (int cell : row)
+        cout << (cell ? "Q " : ". ");
+        cout << "\n";
+    }
+}
+
+int main() {
+    int N;
+    cin >> N;
+    if (cin.fail() || N < 1 || N > 8) {
+        cout << "Invalid input";
+        return 0;
+    }
+    if (N == 2 || N == 3) {
+        cout << "No solution";
+        return 0;
+    }
+    vector<vector<int>> board(N, vector<int>(N, 0));
+    if (solveNQueens(board, 0, N)) {
+        printSolution(board, N);
+    } else {
+        cout << "No solution";
+    }
+    return 0;
+}
+
+//Valid number of solutions
+
+#include <bits/stdc++.h>
+using namespace std;
+bool isSafe(int row, int col, const vector<int>& cols, const vector<int>& diag1, const vector<int>& diag2) {
+    return !cols[col] && !diag1[row - col + cols.size() - 1] && !diag2[row + col];
+}
+void solveNQueens(int row, int N, vector<int>& cols, vector<int>& diag1, vector<int>& diag2, int& result) {
+    if (row == N) {
+        result++;
+        return;
+    }
+    for (int col = 0; col < N; ++col) {
+        if (isSafe(row, col, cols, diag1, diag2)) {
+            cols[col] = 1;
+            diag1[row - col + N - 1] = 1;
+            diag2[row + col] = 1;
+            solveNQueens(row + 1, N, cols, diag1, diag2, result);
+            cols[col] = 0;
+            diag1[row - col + N - 1] = 0;
+            diag2[row + col] = 0;
+        }
+    }
+}
+int main() {
+    int N;
+    cin >> N;
+    if (N < 4 || N > 10) {
+        cout << "Invalid input" << std::endl;
+        return 0;
+    }
+    vector<int> cols(N, 0), diag1(2 * N - 1, 0), diag2(2 * N - 1, 0);
+    int result = 0;
+    solveNQueens(0, N, cols, diag1, diag2, result);
+    cout << result <<endl;
+    return 0;
+}
+
+
+
+
+Knights Tour:
+
+#include <iostream>
+#include <vector>
+using namespace std;
+const int movesX[8] = {-2, -1, 1, 2, 2, 1, -1, -2};
+const int movesY[8] = {1, 2, 2, 1, -1, -2, -2, -1};
+void printSolution(vector<vector<int>> &board, int N) {
+    for (auto &row : board) {
+        for (int cell : row)
+            cout << cell << "\t";
+        cout << "\n";
+    }
+    cout << "\n";
+}
+
+bool isSafe(int x, int y, vector<vector<int>> &board, int N) {
+    return (x >= 0 && x < N && y >= 0 && y < N && board[x][y] == -1);
+}
+
+bool solveKnightTour(vector<vector<int>> &board, int x, int y, int moveCount, int N) {
+    if (moveCount == N * N) {
+        return true; 
+    }
+
+    for (int i = 0; i < 8; i++) {
+        int nextX = x + movesX[i];
+        int nextY = y + movesY[i];
+
+        if (isSafe(nextX, nextY, board, N)) {
+            board[nextX][nextY] = moveCount;
+            if (solveKnightTour(board, nextX, nextY, moveCount + 1, N)) {
+                return true;
+            }
+            board[nextX][nextY] = -1;
+        }
+    }
+
+    return false;
+}
+
+int main() {
+    int N;
+    cin >> N;
+
+    if (N < 1 || N > 8) {
+        cout << "Invalid input (choose 1 to 8)\n";
+        return 0;
+    }
+
+    vector<vector<int>> board(N, vector<int>(N, -1));
+
+    board[0][0] = 0;
+
+    if (solveKnightTour(board, 0, 0, 1, N)) {
+        printSolution(board, N);
+    } else {
+        cout << "No solution exists\n";
+    }
+
+    return 0;
+}
+
+// all solution
+
+#include <iostream>
+#include <vector>
+using namespace std;
+const int movesX[8] = {-2, -1, 1, 2, 2, 1, -1, -2};
+const int movesY[8] = {1, 2, 2, 1, -1, -2, -2, -1};
+void printSolution(vector<vector<int>> &board, int N) {
+    static int solutionCount = 1;
+    cout << "Solution " << solutionCount++ << ":\n";
+    for (auto &row : board) {
+        for (int cell : row)
+            cout << cell << "\t";
+        cout << "\n";
+    }
+    cout << "\n";
+}
+bool isSafe(int x, int y, vector<vector<int>> &board, int N) {
+    return (x >= 0 && x < N && y >= 0 && y < N && board[x][y] == -1);
+}
+void solveKnightTour(vector<vector<int>> &board, int x, int y, int moveCount, int N) {
+    if (moveCount == N * N) { 
+        printSolution(board, N);
+        return;
+    }
+    for (int i = 0; i < 8; i++) {
+        int nextX = x + movesX[i];
+        int nextY = y + movesY[i];
+
+        if (isSafe(nextX, nextY, board, N)) {
+            board[nextX][nextY] = moveCount;
+            solveKnightTour(board, nextX, nextY, moveCount + 1, N);
+            board[nextX][nextY] = -1; 
+        }
+    }
+}
+
+int main() {
+    int N;
+    cin >> N;
+
+    if (N < 1 || N > 8) {
+        cout << "Invalid input (choose 1 to 8)\n";
+        return 0;
+    }
+
+    vector<vector<int>> board(N, vector<int>(N, -1));
+
+    board[0][0] = 0; 
+
+    solveKnightTour(board, 0, 0, 1, N);
+
+    return 0;
+}
+
+
+
